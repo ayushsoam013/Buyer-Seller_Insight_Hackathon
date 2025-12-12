@@ -3,12 +3,13 @@ import time
 import json
 import sys
 import pandas as pd
+from openai_wrapper import IMOpenAI
 
 # --- CONSTANTS ---
-API_URL = "http://34.47.186.170/transcribe"
+API_URL = "http://34.100.247.189/transcribe"
 POLL_INTERVAL_SECONDS = 5   # Time to wait between checks
 MAX_RETRIES = 20            # Max checks before giving up (20 * 5s = 100s timeout)
-CSV_FILE = "call_data_mini.csv"
+CSV_FILE = "call_data.csv"
 OUTPUT_FILE = "call_data_processed.csv"
 
 # Headers (Requests handles Content-Type/boundary automatically for multipart)
@@ -96,16 +97,11 @@ def process_call_data():
             
             # Construct payload
             try:
-                meta_keys = {
-                    "receiverId": str(row['seller_identifier']),
-                    "callerId": str(row['buyer_identifier']),
-                    "modid": str(row['pns_call_modrefname'])
-                }
-                
                 payload = {
+                    "caller_id": str(row['buyer_identifier']),
+                    "receiver_id": str(row['seller_identifier']),
                     "callRecordingLink": row['Signed_URL'],
-                    "callType": "PNS",
-                    "metaKeys": json.dumps(meta_keys)
+                    "callType": "PNS"
                 }
                 
                 # Run transcription
