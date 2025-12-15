@@ -18,8 +18,8 @@ def fetch_transcript_text(url):
         return ""
 
 def main():
-    input_file = 'call_data_processed.csv'
-    output_file = 'call_data_processed.csv'
+    input_file = 'call_data_feed.csv'
+    output_file = 'call_data_feed.csv'
 
     try:
         df = pd.read_csv(input_file)
